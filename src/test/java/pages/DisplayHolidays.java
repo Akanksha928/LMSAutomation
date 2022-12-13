@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class DisplayHolidays {
-	final WebDriver driver;
+	WebDriver driver;
 
 	public DisplayHolidays(WebDriver driver) {
 		this.driver = driver;

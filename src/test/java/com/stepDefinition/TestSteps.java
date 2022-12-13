@@ -1,9 +1,11 @@
 package com.stepDefinition;
 
+import java.io.FileReader;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Properties;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.openqa.selenium.WebDriver;
@@ -21,9 +23,11 @@ import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import pages.ClickOnHolidayList;
 import pages.DisplayHolidays;
 import pages.ValidateHolidays;
+
 
 public class TestSteps {
 
@@ -31,18 +35,23 @@ public class TestSteps {
 	ExtentReports report;
 	ExtentTest test;
 	Logger log = Logger.getLogger(TestSteps.class);
+	Properties props;
+	FileReader reader;
 
 	@Given("User is on EY LMS page")
-	public void user_is_on_ey_lms_page() {
+	public void user_is_on_ey_lms_page() throws IOException {
 
 		// Setting up
-		System.setProperty("webdriver.edge.driver", "Drivers\\msedgedriver.exe");
+		props = new Properties();
+		reader = new FileReader("src\\test\\resources\\data.properties");
+		props.load(reader);
+		WebDriverManager.edgedriver().setup();
 		driver = new EdgeDriver();
-		driver.get("https://lms.ey.net/");
+		driver.get(props.getProperty("url"));
 		driver.manage().window().maximize();
 
 		// Configuring log4j
-		PropertyConfigurator.configure("src\\test\\resources\\log4j.properties");
+		PropertyConfigurator.configure(props.getProperty("log4jPath"));
 
 		report = new ExtentReports();
 		report.setSystemInfo("OS", System.getProperty("os.name"));
@@ -70,15 +79,26 @@ public class TestSteps {
 	public void validate_if_the_public_holiday_count_is_equal_to_or_greater_than(Integer int1) {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 		ValidateHolidays validation = PageFactory.initElements(driver, ValidateHolidays.class);
+		
+//		 Validating by checking size of list
 
-		log.info("Checking if public holidays are greater or lesser than 10");
+		log.info("Checking if public holidays are greater than or equal to 10");
 		if (validation.checkSize() >= 10) {
-			test.fail("Public holidays are greater than or equal to 10");
-			log.info("Public holidays less than or equal to 10");
+			test.pass("Public holidays are greater than or equal to 10");
+			log.info("Public holidays are greater than or equal to 10");
 
 		} else {
-			test.pass("Public holidays less than 10");
+			test.fail("Public holidays less than 10");
 			log.info("Public holidays less than 10");
+			
+//			Screenshot s = new AShot().takeScreenshot(driver);
+//			try {
+//				ImageIO.write(s.getImage(), "PNG", new File("target/img.png"));
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block .
+//				e.printStackTrace();
+//			}
+//			test.fail(MediaEntityBuilder.createScreenCaptureFromPath("img.png").build());
 		}
 
 	}
@@ -102,7 +122,6 @@ public class TestSteps {
 		log.info("Printed list of optional holidays in report");
 
 		List<String> publicHols = new ArrayList<String>();
-
 
 		for (WebElement wb : display.retrieveHols()) {
 			if (wb.getText().contains("Public Holiday")) {
