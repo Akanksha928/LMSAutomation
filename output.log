@@ -1,7 +1,7 @@
-LMS Webpage opened
-Clicked on Holidays link
-Checking if public holidays are greater than or equal to 10
-Public holidays less than 10
-Printed list of optional holidays in report
-Printed list of Public holidays in report
-Browser closed.
+[INFO ] 2023-01-12 12:18:37,183 com.stepDefinition.TestSteps - LMS Webpage opened
+[INFO ] 2023-01-12 12:18:37,295 com.stepDefinition.TestSteps - Clicked on Holidays link
+[INFO ] 2023-01-12 12:18:37,301 com.stepDefinition.TestSteps - Checking if public holidays are greater than or equal to 10
+[INFO ] 2023-01-12 12:18:38,275 com.stepDefinition.TestSteps - Public holidays less than 10
+[INFO ] 2023-01-12 12:18:39,148 com.stepDefinition.TestSteps - Printed list of optional holidays in report
+[INFO ] 2023-01-12 12:18:39,619 com.stepDefinition.TestSteps - Printed list of Public holidays in report
+[INFO ] 2023-01-12 12:18:41,048 com.stepDefinition.TestSteps - Browser closed.
